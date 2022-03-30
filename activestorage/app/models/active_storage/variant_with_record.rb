@@ -45,9 +45,8 @@ class ActiveStorage::VariantWithRecord
           blob.variant_records.create_or_find_by!(variation_digest: variation.digest) do |record|
             record.image.attach(image)
           end
+          byebug
         end
-      byebug
-      @record
     end
 
     def record
