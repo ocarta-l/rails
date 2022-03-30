@@ -88,7 +88,7 @@ class ActiveStorage::Blob < ActiveStorage::Record
     end
 
     def build_after_unfurling(key: nil, io:, filename:, content_type: nil, metadata: nil, service_name: nil, identify: true, record: nil) # :nodoc:
-      new(key: key, filename: filename, content_type: content_type, metadata: metadata, service_name: service_name, record: record).tap do |blob|
+      new(key: key, filename: filename, content_type: content_type, metadata: metadata, service_name: service_name).tap do |blob|
         blob.unfurl(io, identify: identify)
       end
     end
