@@ -43,6 +43,7 @@ class ActiveStorage::VariantWithRecord
       @record =
         ActiveRecord::Base.connected_to(role: ActiveRecord.writing_role) do
           p "--------- variation.digest = #{variation.digest}"
+          byebug
           blob.variant_records.create_or_find_by!(variation_digest: variation.digest) do |record|
             record.image.attach(image)
           p "--------- inside create_or_find_by"
