@@ -42,10 +42,9 @@ class ActiveStorage::VariantWithRecord
     def create_or_find_record(image:)
       @record =
         ActiveRecord::Base.connected_to(role: ActiveRecord.writing_role) do
-          blob.variant_records.create_or_find_by!(variation_digest: variation.digest) do |record|
-            byebug
-            record.image.attach(image)
-          end
+          variant_record = blob.variant_records.create_or_find_by!(variation_digest: variation.digest)
+          byebug
+          variant_record.image.attach(image)
         end
     end
 
