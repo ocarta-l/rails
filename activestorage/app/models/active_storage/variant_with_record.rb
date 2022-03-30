@@ -42,14 +42,12 @@ class ActiveStorage::VariantWithRecord
     def create_or_find_record(image:)
       @record =
         ActiveRecord::Base.connected_to(role: ActiveRecord.writing_role) do
-          p "--------- variation.digest = #{variation.digest}"
-          byebug
           blob.variant_records.create_or_find_by!(variation_digest: variation.digest) do |record|
             record.image.attach(image)
-          p "--------- inside create_or_find_by"
           end
-          p "--------- after create_or_find_by"
         end
+      byebug
+      @record
     end
 
     def record
