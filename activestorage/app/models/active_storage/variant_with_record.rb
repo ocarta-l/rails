@@ -53,7 +53,7 @@ class ActiveStorage::VariantWithRecord
       @record ||= if blob.variant_records.loaded?
         blob.variant_records.find { |v| v.variation_digest == variation.digest }
       else
-        blob.variant_records.create!(variation_digest: variation.digest)
+        blob.variant_records.find_by(variation_digest: variation.digest)
       end
     end
 end
