@@ -76,7 +76,7 @@ class ActiveStorage::Blob < ActiveStorage::Record
     #
     # The signed ID is also used to create stable URLs for the blob through the BlobsController.
     def find_signed(id, record: nil, purpose: :blob_id)
-      super(id, record: record, purpose: purpose)
+      super(id, purpose: purpose)
     end
 
     # Works like +find_signed+, but will raise an +ActiveSupport::MessageVerifier::InvalidSignature+
@@ -84,7 +84,7 @@ class ActiveStorage::Blob < ActiveStorage::Record
     # or has been tampered with. It will also raise an +ActiveRecord::RecordNotFound+ exception if
     # the valid signed id can't find a record.
     def find_signed!(id, record: nil, purpose: :blob_id)
-      super(id, record: record, purpose: purpose)
+      super(id, purpose: purpose)
     end
 
     def build_after_unfurling(key: nil, io:, filename:, content_type: nil, metadata: nil, service_name: nil, identify: true, record: nil) # :nodoc:
@@ -94,7 +94,7 @@ class ActiveStorage::Blob < ActiveStorage::Record
     end
 
     def create_after_unfurling!(key: nil, io:, filename:, content_type: nil, metadata: nil, service_name: nil, identify: true, record: nil) # :nodoc:
-      build_after_unfurling(key: key, io: io, filename: filename, content_type: content_type, metadata: metadata, service_name: service_name, identify: identify, record: record).tap(&:save!)
+      build_after_unfurling(key: key, io: io, filename: filename, content_type: content_type, metadata: metadata, service_name: service_name, identify: identify).tap(&:save!)
     end
 
     # Creates a new blob instance and then uploads the contents of
@@ -103,7 +103,7 @@ class ActiveStorage::Blob < ActiveStorage::Record
     # When providing a content type, pass <tt>identify: false</tt> to bypass
     # automatic content type inference.
     def create_and_upload!(key: nil, io:, filename:, content_type: nil, metadata: nil, service_name: nil, identify: true, record: nil)
-      create_after_unfurling!(key: key, io: io, filename: filename, content_type: content_type, metadata: metadata, service_name: service_name, identify: identify, record: record).tap do |blob|
+      create_after_unfurling!(key: key, io: io, filename: filename, content_type: content_type, metadata: metadata, service_name: service_name, identify: identify).tap do |blob|
         blob.upload_without_unfurling(io)
       end
     end
@@ -114,7 +114,7 @@ class ActiveStorage::Blob < ActiveStorage::Record
     # Once the form using the direct upload is submitted, the blob can be associated with the right record using
     # the signed ID.
     def create_before_direct_upload!(key: nil, filename:, byte_size:, checksum:, content_type: nil, metadata: nil, service_name: nil, record: nil)
-      create! key: key, filename: filename, byte_size: byte_size, checksum: checksum, content_type: content_type, metadata: metadata, service_name: service_name, record: record
+      create! key: key, filename: filename, byte_size: byte_size, checksum: checksum, content_type: content_type, metadata: metadata, service_name: service_name
     end
 
     # To prevent problems with case-insensitive filesystems, especially in combination
